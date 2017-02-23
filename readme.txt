@@ -1,0 +1,5 @@
+github url: https://github.com/Lucav17/crawler
+
+app url: http://lucav17.cloudapp.net/
+
+First I started with an index file to ceate the basic structure of the dashboard, i gave it alot of little P tags with id's to change later. I think worked on the worker role, starting with parsing the robots file. Inside the worker role I had it do checks on the queues, if there were still files in the xml queue then I would be in loading, if that was done I would be in crawling. I then passed the url I grabbed from the queue into a crawler object to crawl that webpage decided which type of page this was. Depending on the page type, xml, html, or txt the crawler would then crawl it accordingly. When finding url's on an html page, I globally stored all of my saved urls in a hashset for easy look up and to not allow duplicates. After processing the url I would then pass that into my table. For my front end, I used several queues to pass values from my worker role to my web role and then passed it the index file throuh ajax calls

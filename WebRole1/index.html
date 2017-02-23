@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+    <h2 style="text-align:center;margin-top:75px;">Dashboard will refresh and update on it's own.</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2" style="margin-top:20vh;text-align:center;margin-bottom:50px;">
+                
+                <div class="col-md-6">
+                    <p>CPU: <span id="cpu"></span>%</p>
+                </div>
+                <div class="col-md-6">
+                    <p>RAM: <span id="ram"></span></p>
+                </div>
+                <p>Latest error: <br /><span id="error"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3" style="text-align:center;margin-bottom:50px;">
+                <button type="button" class="btn btn-primary" id="1">Start</button>
+                <button type="button" class="btn btn-primary" id="2">Stop</button>
+                <button type="button" class="btn btn-primary" id="3">Reset</button>
+                <button type="button" class="btn btn-primary four" id="4">Dashboard</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <p style="text-align:center">Total URL's in Queue: <span id="totalUrls"></span></p>
+                <p style="text-align:center">Total URL's in Table: <span id="totalTable"></span></p>
+                <p style="text-align:center">Current Status: <span id="status"></span></p>
+                <p style="text-align:center">Last 10 URL's Crawled:</p>
+                <ul style="text-align:center" id="top"></ul>
+            </div>
+        </div>
+    </div>
+    
+
+
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script>
+        setInterval(function () {
+            $("#4").trigger("click");
+        }, 9000);
+
+        $("#1").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/GetRobotInfo",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+        });
+
+
+        $("#2").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/pause",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+
+        });
+
+
+        $("#3").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/ClearQueue",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+        });
+
+
+        $("#4").click(function () {
+
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/getCPU",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                    var arr = msg.d;
+                    arr = arr.replace("[", "");
+                    arr = arr.replace("]", "");
+                    arr = arr.replace(/"/g, "");
+                    $("#cpu").text(arr);
+                    console.log(arr);
+
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/getError",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                    var arr = msg.d;
+                    arr = arr.replace("[", "");
+                    arr = arr.replace("]", "");
+                    arr = arr.replace(/"/g, "");
+                    $("#error").text(arr);
+                    console.log(arr);
+
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/getRAM",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                    var arr = msg.d;
+                    arr = arr.replace("[", "");
+                    arr = arr.replace("]", "");
+                    arr = arr.replace(/"/g, "");
+                    $("#ram").text(arr);
+                    console.log(arr);
+
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/retrieveNumbers",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                    var arr = msg.d;
+                    arr = arr.replace("[", "");
+                    arr = arr.replace("]", "");
+                    arr = arr.replace(/"/g, "");
+
+                    var data = arr.split(',');
+                    var total = parseInt(data[0]) + parseInt(data[1]);
+                    $("#totalUrls").text(total);
+                    console.log(arr);
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/retrieveStatus",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                    var arr = msg.d;
+                    arr = arr.replace("[", "");
+                    arr = arr.replace("]", "");
+                    arr = arr.replace(/"/g, "");
+                    
+                    $("#status").text(arr);
+                    console.log(arr);
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/top10",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                    var arr = msg.d;
+                    arr = arr.replace("[", "");
+                    arr = arr.replace("]", "");
+                    arr = arr.replace(/"/g, "");
+                    var data = arr.split(',');
+                    var s = "";
+                    console.log(data);
+                    data.forEach(function (e) {
+                        s += "<a href='"+ e + "' target='_BLANK'><li>" + e + "</li></a>";
+                    });
+                    $("#top").html(s);
+                    console.log(arr);
+        
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "WebService1.asmx/getTotal",
+                data: "{}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (msg) {
+                    console.log("success");
+                    var arr = msg.d;
+                    arr = arr.replace("[", "");
+                    arr = arr.replace("]", "");
+                    arr = arr.replace(/"/g, "");
+                    $("#totalTable").text(arr);
+                    console.log(arr);
+
+                },
+                error: function (msg) {
+                    console.log("failure");
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
